@@ -9,7 +9,7 @@ export function FAQSection() {
             Preguntas Frecuentes
           </h2>
           <p className="mt-4 text-muted-foreground md:text-lg">
-            ¿Tienes alguna duda? Pregúntale a nuestro asistente de IA o envíanos un mensaje.
+            ¿Tienes alguna duda? envíanos un mensaje.
           </p>
         </div>
         <div className="mt-12">
