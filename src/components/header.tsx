@@ -39,10 +39,6 @@ export function Header() {
         </nav>
         <div className="flex flex-1 items-center justify-end space-x-2">
           <ModeToggle />
-          <Button variant="ghost" size="icon" className="hover:bg-primary-foreground/10">
-            <ShoppingCart className="h-5 w-5" />
-            <span className="sr-only">Shopping Cart</span>
-          </Button>
           <Sheet>
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon" className="md:hidden hover:bg-primary-foreground/10">
