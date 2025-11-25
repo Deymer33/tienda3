@@ -3,7 +3,7 @@
     {
       "id": "hero-background",
       "description": "Wide shot of a modern, clean factory interior with industrial machinery.",
-      "imageUrl": "https://images.unsplash.com/photo-1647427060118-4911c9821b82?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxpbmR1c3RyaWFsJTIwbWFjaGluZXJ5fGVufDB8fHx8MTc2MzUzNzM5NHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "/heroimg.webp",
       "imageHint": "industrial machinery"
     }
   ]
