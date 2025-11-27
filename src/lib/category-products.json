@@ -1,0 +1,104 @@
+{
+    "categoryProducts": [
+        {
+            "categoryId": 1,
+            "categoryname": "Abrillantador de muebles",
+            "productIds": [101, 102, 103]
+        },
+        {
+            "categoryId": 2,
+            "categoryname": "Accesorios para Baño",
+            "productIds": [201, 202]
+        },
+        {
+            "categoryId": 3,
+            "categoryname": "Aromatizantes",
+            "productIds": [301, 302, 303, 304]
+        },
+        {
+            "categoryId": 4,
+            "categoryname": "Bolsas",
+            "productIds": [301, 302, 303, 304]
+        },
+        {
+            "categoryId": 5,
+            "categoryname": "Cestos y cubetas",
+            "productIds": [301, 302, 303, 304]
+        },
+        {
+            "categoryId": 6,
+            "categoryname": "Desechables",
+            "productIds": [301, 302, 303, 304]
+        },
+        {
+            "categoryId": 7,
+            "categoryname": "Desinfectantes",
+            "productIds": [301, 302, 303, 304]
+        },
+        {
+            "categoryId": 8,
+            "categoryname": "Empaques",
+            "productIds": [301, 302, 303, 304]
+        },
+        {
+            "categoryId": 9,
+            "categoryname": "Escobas",
+            "productIds": [301, 302, 303, 304]
+        },
+        {
+            "categoryId": 10,
+            "categoryname": "Estructuras y fundas para moop",
+            "productIds": [301, 302, 303, 304]
+        },
+        {
+            "categoryId": 11,
+            "categoryname": "Guantes de protección",
+            "productIds": [301, 302, 303, 304]
+        },
+        {
+            "categoryId": 12,
+            "categoryname": "insecticidas",
+            "productIds": [301, 302, 303, 304]
+        },
+        {
+            "categoryId": 13,
+            "categoryname": "jabon en polvo",
+            "productIds": [301, 302, 303, 304]
+        },
+        {
+            "categoryId": 14,
+            "categoryname": "Jaladores y cepillos",
+            "productIds": [301, 302, 303, 304]
+        },
+        {
+            "categoryId": 15,
+            "categoryname": "Jarceria",
+            "productIds": [301, 302, 303, 304]
+        },
+        {
+            "categoryId": 16,
+            "categoryname": "Limpiador multiusos",
+            "productIds": [301, 302, 303, 304]
+        },
+        {
+            "categoryId": 17,
+            "categoryname": "papeles y toallas",
+            "productIds": [301, 302, 303, 304]
+        },
+        {
+            "categoryId": 18,
+            "categoryname": "productos agranel",
+            "productIds": [301, 302, 303, 304]
+        },
+        {
+            "categoryId": 19,
+            "categoryname": "Thinner y solventes",
+            "productIds": [301, 302, 303, 304]
+        },
+        {
+            "categoryId": 20,
+            "categoryname": "Trapeadores",
+            "productIds": [301, 302, 303, 304]
+        }
+    ]
+}
