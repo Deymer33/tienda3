@@ -13,9 +13,6 @@ export async function submitInquiry(formData: FormData) {
   try {
     const data = Object.fromEntries(formData.entries());
     const parsedData = formSchema.parse(data);
-
-    // In a real application, you would send an email, save to a database, etc.
-    console.log("New Inquiry Received:", parsedData);
     
     return { success: true, message: "Inquiry submitted successfully." };
   } catch (error) {
