@@ -44,3 +44,16 @@ export const products = pgTable("products", {
     .notNull(),
   created_at: timestamp("created_at").defaultNow().notNull(),
 });
+
+// ========================================================
+// INQUIRIES TABLE
+// ========================================================
+export const inquiries = pgTable("inquiries", {
+  id: serial("id").primaryKey(),
+  name: varchar("name", { length: 255 }).notNull(),
+  email: varchar("email", { length: 255 }).notNull(),
+  subject: varchar("subject", { length: 255 }).notNull(),
+  message: text("message").notNull(),
+  status: varchar("status", { length: 50 }).default("pending"), // pending, reviewed, responded
+  created_at: timestamp("created_at").defaultNow().notNull(),
+});
