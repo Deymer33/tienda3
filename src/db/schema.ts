@@ -39,7 +39,6 @@ export const products = pgTable("products", {
   id: serial("id").primaryKey(),
   name: varchar("name", { length: 255 }).notNull(),
   description: text("description"),
-  image_url: varchar("image_url", { length: 500 }), // opcional
   category_id: integer("category_id")
     .references(() => categories.id)
     .notNull(),
