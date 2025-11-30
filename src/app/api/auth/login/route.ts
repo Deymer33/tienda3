@@ -8,7 +8,6 @@ export async function POST(req: Request) {
   try {
     const { email, password } = await req.json();
 
-    // Buscar el usuario con Drizzle
     const result = await db
       .select()
       .from(users)
@@ -23,7 +22,6 @@ export async function POST(req: Request) {
       );
     }
 
-    // Comparar contraseña
     const valid = await comparePassword(password, user.password);
     if (!valid) {
       return NextResponse.json(
@@ -32,14 +30,24 @@ export async function POST(req: Request) {
       );
     }
 
-    // Crear token JWT
     const token = signToken({
       id: user.id,
       email: user.email,
-      role: "admin", 
+      role: "admin",
     });
 
-    return NextResponse.json({ token });
+    // --- IMPORTANTE: guardar token en cookie HttpOnly ---
+    const response = NextResponse.json({ ok: true });
+
+    response.cookies.set("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      path: "/",          // disponible para toda la app
+      maxAge: 60 * 60 * 24 * 7, // 7 días
+    });
+
+    return response;
+
   } catch (err) {
     console.error(err);
     return NextResponse.json(

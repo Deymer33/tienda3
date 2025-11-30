@@ -1,13 +1,14 @@
 import Link from "next/link";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
-import { Menu, Zap, ShoppingCart } from "lucide-react";
+import { Menu, Zap, } from "lucide-react";
 import { companyName } from "@/lib/company-data";
 import { ModeToggle } from "../mode-toggle";
 import Image from "next/image";
 
 const navLinks = [
-  { href: "#cotizaciones", label: "cotizaciones" },
+  { href: "/admin/quotes", label: "cotizaciones" },
+  { href: "/admin/", label: "categorías" },
 ];
 
 export function Header() {
@@ -61,9 +62,14 @@ export function Header() {
               </nav>
             </SheetContent>
           </Sheet>
-          <Button asChild className="hidden md:inline-flex bg-accent hover:bg-accent/90 text-accent-foreground">
-            <Link href="#contact">cerrar sesion</Link>
-          </Button>
+        <Button
+          onClick={async () => {
+            await fetch("/api/auth/logout", { method: "POST" });
+            window.location.href = "/login";
+          }}
+        >
+          Cerrar sesión
+        </Button>
         </div>
       </div>
     </header>

@@ -1,12 +1,12 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import jwt from "jsonwebtoken";
-import AdminPageClient from "./AdminPageClient";
+import QuotesPageClient from "./QuotesPageClient";
 
 export const dynamic = "force-dynamic";
 
-export default async function AdminPage() {
-  const cookieStore = await cookies(); 
+export default async function QuotesPage() {
+  const cookieStore = await cookies();
   const token = cookieStore.get("token")?.value;
 
   if (!token) redirect("/login");
@@ -17,5 +17,5 @@ export default async function AdminPage() {
     redirect("/login");
   }
 
-  return <AdminPageClient />;
+  return <QuotesPageClient />;
 }

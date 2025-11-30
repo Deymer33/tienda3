@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { Plus, Edit, Trash, Search } from "lucide-react";
 
 type Product = {
   id: number;
@@ -17,15 +18,19 @@ type Category = {
 export default function ProductsTable() {
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
-  const [openModal, setOpenModal] = useState(false);
-  const [editProduct, setEditProduct] = useState<Product | null>(null);
 
-  // Campos de formulario
+  const [modalOpen, setModalOpen] = useState(false);
+  const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+
+  // Form fields
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [categoryId, setCategoryId] = useState<number | null>(null);
 
-  // Cargar datos
+  // Search state
+  const [search, setSearch] = useState("");
+
+  // Load data
   useEffect(() => {
     loadProducts();
     loadCategories();
@@ -44,19 +49,19 @@ export default function ProductsTable() {
   }
 
   function openCreateModal() {
-    setEditProduct(null);
+    setEditingProduct(null);
     setName("");
     setDescription("");
     setCategoryId(null);
-    setOpenModal(true);
+    setModalOpen(true);
   }
 
   function openEditModal(product: Product) {
-    setEditProduct(product);
+    setEditingProduct(product);
     setName(product.name);
     setDescription(product.description || "");
     setCategoryId(product.category_id);
-    setOpenModal(true);
+    setModalOpen(true);
   }
 
   async function handleSave(e: any) {
@@ -64,8 +69,8 @@ export default function ProductsTable() {
 
     const body = { name, description, categoryId };
 
-    if (editProduct) {
-      await fetch(`/api/products/${editProduct.id}`, {
+    if (editingProduct) {
+      await fetch(`/api/products/${editingProduct.id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
@@ -78,7 +83,7 @@ export default function ProductsTable() {
       });
     }
 
-    setOpenModal(false);
+    setModalOpen(false);
     loadProducts();
   }
 
@@ -89,71 +94,119 @@ export default function ProductsTable() {
     loadProducts();
   }
 
-  return (
-    <div className="p-6 bg-white rounded shadow">
+  // === 🔍 FILTER PRODUCTS ===
+  const filteredProducts = products.filter((p) => {
+    const productName = p.name.toLowerCase();
+    const categoryName =
+      categories.find((c) => c.id === p.category_id)?.name.toLowerCase() || "";
 
-      <div className="flex justify-between mb-4">
-        <h2 className="text-xl font-bold">Productos</h2>
+    const term = search.toLowerCase();
+
+    return (
+      productName.includes(term) ||
+      categoryName.includes(term)
+    );
+  });
+
+  return (
+    <div className="p-6 bg-white rounded-xl shadow-lg border border-gray-200">
+      {/* Title + Button */}
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-2xl font-semibold">Productos</h2>
+
         <button
           onClick={openCreateModal}
-          className="px-3 py-2 bg-blue-600 text-white rounded"
+          className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg shadow hover:bg-primary/90 transition"
         >
-          + Nuevo Producto
+          <Plus size={18} /> Nuevo Producto
         </button>
       </div>
 
-      {/* Tabla */}
-      <table className="w-full border">
-        <thead>
-          <tr className="bg-gray-100">
-            <th className="p-2 border">ID</th>
-            <th className="p-2 border">Nombre</th>
-            <th className="p-2 border">Categoría</th>
-            <th className="p-2 border">Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          {products.map((p) => (
-            <tr key={p.id}>
-              <td className="p-2 border">{p.id}</td>
-              <td className="p-2 border">{p.name}</td>
-              <td className="p-2 border">
-                {categories.find((c) => c.id === p.category_id)?.name || "—"}
-              </td>
-              <td className="p-2 border space-x-2">
-                <button
-                  onClick={() => openEditModal(p)}
-                  className="px-2 py-1 bg-yellow-500 text-white rounded"
-                >
-                  Editar
-                </button>
+      {/* 🔍 Search Bar */}
+      <div className="flex items-center gap-2 mb-4 bg-gray-100 px-3 py-2 rounded-lg border border-gray-300">
+        <Search size={18} className="text-gray-500" />
+        <input
+          className="flex-1 bg-transparent outline-none text-sm"
+          placeholder="Buscar por nombre o categoría..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+      </div>
 
-                <button
-                  onClick={() => handleDelete(p.id)}
-                  className="px-2 py-1 bg-red-600 text-white rounded"
-                >
-                  Eliminar
-                </button>
-              </td>
+      {/* Table */}
+      <div className="overflow-hidden rounded-lg border border-gray-200 shadow-sm">
+        <table className="w-full text-sm">
+          <thead className="bg-gray-50 text-gray-600">
+            <tr>
+              <th className="p-3 text-left border-b">ID</th>
+              <th className="p-3 text-left border-b">Nombre</th>
+              <th className="p-3 text-left border-b">Categoría</th>
+              <th className="p-3 text-left border-b">Acciones</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+
+          <tbody className="bg-white">
+            {filteredProducts.map((p) => (
+              <tr
+                key={p.id}
+                className="hover:bg-gray-50 border-b last:border-none transition"
+              >
+                <td className="p-3">{p.id}</td>
+                <td className="p-3 font-medium">{p.name}</td>
+                <td className="p-3">
+                  {
+                    categories.find((c) => c.id === p.category_id)?.name ||
+                    <span className="text-gray-400">Sin categoría</span>
+                  }
+                </td>
+
+                <td className="p-3">
+                  <div className="flex gap-3">
+                    <button
+                      onClick={() => openEditModal(p)}
+                      className="text-blue-600 hover:text-blue-800 transition"
+                    >
+                      <Edit size={18} />
+                    </button>
+
+                    <button
+                      onClick={() => handleDelete(p.id)}
+                      className="text-red-500 hover:text-red-700 transition"
+                    >
+                      <Trash size={18} />
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            ))}
+
+            {filteredProducts.length === 0 && (
+              <tr>
+                <td
+                  colSpan={4}
+                  className="text-center p-6 text-gray-500 italic"
+                >
+                  No se encontraron productos que coincidan con la búsqueda.
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
 
       {/* Modal */}
-      {openModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center">
-          <div className="bg-white p-6 rounded w-96 shadow-lg">
-            <h3 className="text-lg font-bold mb-4">
-              {editProduct ? "Editar Producto" : "Nuevo Producto"}
+      {modalOpen && (
+        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-[999] animate-fadeIn">
+          <div className="bg-white p-6 rounded-xl shadow-xl w-96 animate-scaleIn">
+            <h3 className="text-xl font-semibold mb-4">
+              {editingProduct ? "Editar Producto" : "Nuevo Producto"}
             </h3>
 
             <form onSubmit={handleSave} className="space-y-4">
-
               <div>
-                <label className="block text-sm mb-1">Nombre</label>
+                <label className="block text-sm mb-1 font-medium">Nombre</label>
                 <input
-                  className="w-full border p-2 rounded"
+                  className="w-full border p-2 rounded-lg"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   required
@@ -161,18 +214,22 @@ export default function ProductsTable() {
               </div>
 
               <div>
-                <label className="block text-sm mb-1">Descripción</label>
+                <label className="block text-sm mb-1 font-medium">
+                  Descripción
+                </label>
                 <textarea
-                  className="w-full border p-2 rounded"
+                  className="w-full border p-2 rounded-lg"
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
-                ></textarea>
+                />
               </div>
 
               <div>
-                <label className="block text-sm mb-1">Categoría</label>
+                <label className="block text-sm mb-1 font-medium">
+                  Categoría
+                </label>
                 <select
-                  className="w-full border p-2 rounded"
+                  className="w-full border p-2 rounded-lg"
                   value={categoryId ?? ""}
                   onChange={(e) =>
                     setCategoryId(e.target.value ? Number(e.target.value) : null)
@@ -187,27 +244,44 @@ export default function ProductsTable() {
                 </select>
               </div>
 
-              <div className="flex justify-end gap-3">
+              <div className="flex justify-end gap-3 mt-6">
                 <button
                   type="button"
-                  onClick={() => setOpenModal(false)}
-                  className="px-3 py-2 bg-gray-300 rounded"
+                  onClick={() => setModalOpen(false)}
+                  className="px-4 py-2 rounded-lg border"
                 >
                   Cancelar
                 </button>
 
                 <button
                   type="submit"
-                  className="px-3 py-2 bg-green-600 text-white rounded"
+                  className="px-4 py-2 bg-primary text-white rounded-lg shadow hover:bg-primary/90 transition"
                 >
                   Guardar
                 </button>
               </div>
-
             </form>
           </div>
         </div>
       )}
+
+      {/* Animations */}
+      <style jsx global>{`
+        .animate-fadeIn {
+          animation: fadeIn 0.2s ease-out;
+        }
+        .animate-scaleIn {
+          animation: scaleIn 0.2s ease-out;
+        }
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        @keyframes scaleIn {
+          from { transform: scale(0.95); opacity: 0; }
+          to { transform: scale(1); opacity: 1; }
+        }
+      `}</style>
     </div>
   );
 }

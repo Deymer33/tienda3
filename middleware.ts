@@ -3,7 +3,7 @@ import type { NextRequest } from "next/server";
 import jwt from "jsonwebtoken";
 
 export function middleware(req: NextRequest) {
-  const token = req.headers.get("Authorization")?.replace("Bearer ", "");
+  const token = req.cookies.get("token")?.value;
 
   if (!token) {
     return NextResponse.redirect(new URL("/login", req.url));
@@ -12,11 +12,18 @@ export function middleware(req: NextRequest) {
   try {
     jwt.verify(token, process.env.JWT_SECRET!);
     return NextResponse.next();
-  } catch {
+  } catch (err) {
     return NextResponse.redirect(new URL("/login", req.url));
   }
 }
 
 export const config = {
-  matcher: ["/admin/:path*"], // protege todo la ruta /admin/*
+  matcher: [
+    "/admin",
+    "/admin/quotes",
+    "/admin/:path*",
+    "/api/categories/:path*",
+    "/api/products/:path*",
+    "/api/inquiries/:path*",
+  ],
 };
