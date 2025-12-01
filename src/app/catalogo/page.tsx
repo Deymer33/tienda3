@@ -79,7 +79,7 @@ export default function ProductosPage() {
             <img
               src={category.image_url}
               alt={category.name}
-              className="w-full h-40 object-cover rounded mb-4"
+              className="w-full h-50 object-cover rounded mb-4"
             />
           )}
 
