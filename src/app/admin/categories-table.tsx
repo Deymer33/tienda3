@@ -40,45 +40,52 @@ export default function CategoriesTable() {
     setModalOpen(true);
   }
 
-  async function handleSave() {
-    let uploadedImageUrl = form.image_url;
+async function handleSave() {
+  let uploadedImageUrl = form.image_url;
 
-    if (imageFile) {
-      const imgForm = new FormData();
-      imgForm.append("file", imageFile);
+  // Si se sube una nueva imagen, reemplaza la URL
+  if (imageFile) {
+    const imgForm = new FormData();
+    imgForm.append("file", imageFile);
 
-      const uploadRes = await fetch("/api/upload", {
-        method: "POST",
-        body: imgForm,
-      });
+    const uploadRes = await fetch("/api/upload", {
+      method: "POST",
+      body: imgForm,
+    });
 
-      const uploadData = await uploadRes.json();
-      uploadedImageUrl = uploadData.url;
-    }
-
-    const body = {
-      name: form.name,
-      description: form.description,
-      image_url: uploadedImageUrl,
-    };
-
-    if (form.id) {
-      await fetch(`/api/categories/${form.id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
-      });
-    } else {
-      await fetch("/api/categories", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
-      });
-    }
-
-    setModalOpen(false);
-    loadCategories();
+    const uploadData = await uploadRes.json();
+    uploadedImageUrl = uploadData.url;
   }
+
+  // Siempre asegurar que la URL empiece con "/"
+  if (uploadedImageUrl && !uploadedImageUrl.startsWith("/")) {
+    uploadedImageUrl = "/" + uploadedImageUrl;
+  }
+
+  const body = {
+    name: form.name,
+    description: form.description,
+    image_url: uploadedImageUrl,
+  };
+
+  if (form.id) {
+    await fetch(`/api/categories/${form.id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+  } else {
+    await fetch("/api/categories", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+  }
+
+  setModalOpen(false);
+  loadCategories();
+}
+
 
   function handleImageChange(e: any) {
     const file = e.target.files?.[0];

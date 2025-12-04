@@ -42,3 +42,41 @@ export async function GET(
     );
   }
 }
+
+export async function PUT(
+  req: Request,
+  context: { params: Promise<{ id: string }> }
+) {
+  try {
+    const { id } = await context.params;
+    const categoryId = Number(id);
+
+    const body = await req.json();
+
+    const { name, description, image_url } = body;
+
+    // Validar
+    if (!name) {
+      return NextResponse.json({ error: "Name is required" }, { status: 400 });
+    }
+
+    // Actualizar
+    const result = await db
+      .update(categories)
+      .set({
+        name,
+        description,
+        image_url,
+      })
+      .where(eq(categories.id, categoryId))
+      .returning();
+
+    return NextResponse.json(result[0]);
+  } catch (error) {
+    console.error("Error PUT category:", error);
+    return NextResponse.json(
+      { error: "Error updating category" },
+      { status: 500 }
+    );
+  }
+}

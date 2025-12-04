@@ -73,13 +73,14 @@ export default function ProductosPage() {
           data-aos="fade-up"
           onClick={() => window.location.href = `/catalogo/${category.id}`}
           className="p-6 rounded-lg border border-primary/20 shadow-sm bg-background
-          hover:shadow-lg transition cursor-pointer"
+          hover:shadow-lg transition cursor-pointer min-h-[300px] flex flex-col"
         >
           {category.image_url && (
             <img
               src={category.image_url}
               alt={category.name}
-              className="w-full h-50 object-cover rounded mb-4"
+              className="w-full h-48 object-cover rounded mb-4"
+              loading="lazy"
             />
           )}
 
@@ -90,6 +91,7 @@ export default function ProductosPage() {
           )}
         </div>
       ))}
+
     </div>
         )}
       </main>
