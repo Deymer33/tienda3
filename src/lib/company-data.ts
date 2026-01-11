@@ -51,7 +51,7 @@ export const services: { title: string; description: string; icon: string; }[] =
 export const contact = {
     address: "Plan de Ayala #2173, Privada Ntra. Sra. de la Soledad, Soledad de Graciano Sánchez, San Luis Potosí 78430",
     phone: "+52 444 123 4567",
-    email: "contacto@sysgovil.com",
+    email: "Suministros_y_servicios@hotmail.com",
     whatsapp: "https://wa.me/524441234567",
     socials: {
         facebook: "https://facebook.com/sysgovil",
