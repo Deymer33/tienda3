@@ -22,10 +22,9 @@ export function Header() {
           <Image
             src="/logo.jpg"
             alt="Logo"
-            width={52}
-            height={52}
+            width={82}
+            height={72}
           />
-          <span className="font-bold font-headline text-lg">{companyName}</span>
         </Link>
         <nav className="hidden flex-1 items-center space-x-6 text-sm font-medium md:flex">
           {navLinks.map((link) => (
